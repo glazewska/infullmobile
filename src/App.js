@@ -10,33 +10,27 @@ class App extends Component {
       newItem: "",
       list: [],
       ingredients: "",
-      showRecipe: false
+      showRecipe: false,
     };
   }
 
   componentDidMount() {
-    this.hydrateStateWithLocalStorage();
-
-    // add event listener to save state to localStorage
-    // when user leaves/refreshes the page
+    this.compareData();
     window.addEventListener(
       "beforeunload",
-      this.saveStateToLocalStorage.bind(this)
+      this.saveToStorage.bind(this)
     );
   }
 
   componentWillUnmount() {
     window.removeEventListener(
       "beforeunload",
-      this.saveStateToLocalStorage.bind(this)
+      this.saveToStorage.bind(this)
     );
-
-    // saves if component has a chance to unmount
-    this.saveStateToLocalStorage();
+    this.saveToStorage();
   }
 
-  hydrateStateWithLocalStorage() {
-    // for all items in state
+  compareData() {
     for (let key in this.state) {
       // if the key exists in localStorage
       if (localStorage.hasOwnProperty(key)) {
@@ -55,7 +49,7 @@ class App extends Component {
     }
   }
 
-  saveStateToLocalStorage() {
+  saveToStorage() {
     // for every item in React state
     for (let key in this.state) {
       // save to localStorage
@@ -68,7 +62,6 @@ class App extends Component {
   }
 
   addItem() {
-    // create a new item with unique id
     const newItem = {
       id: 1 + Math.random(),
       value: this.state.newItem.slice(),
@@ -78,16 +71,15 @@ class App extends Component {
     // copy current list of items
     const list = [...this.state.list];
 
-    // add the new item to the list
     list.push(newItem);
 
-    // update state with new list, reset the new item input
     this.setState({
       list,
       newItem: "",
       ingredients: ""
     });
   }
+
 
   deleteItem(id) {
     // copy current list of items
@@ -99,12 +91,11 @@ class App extends Component {
   }
 
   showItem() {
-    this.setState({showRecipe: true});
+    this.setState({showRecipe: !this.state.showRecipe});
   }
 
 
   render() {
-
     console.log(this.state);
 
     return (
@@ -142,15 +133,31 @@ class App extends Component {
                 return (
                   <li className="list-item" key={item.id}>
                     {item.value}
+                    {this.state.showRecipe &&
+                    <div className="backdrop">
+                      <div className="modal">
+                        <div className="ingredients-list">
+                          <input defaultValue={item.value}/>
+                          <textarea defaultValue={item.ingredients}/>
+                        </div>
+                        <button onClick={console.log('klik')}>
+                          Save
+                        </button>
+                        <button onClick={() => this.deleteItem(item.id)}>
+                          Delete
+                        </button>
+                        <button
+                          onClick={() => this.showItem(item.id)}>
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                    }
+
                     <button
-                      onClick={() => this.showItem(item.id)}
-                    >
+                      onClick={() => this.showItem(item.id)}>
                       Show
                     </button>
-                    <button onClick={() => this.deleteItem(item.id)}>
-                      Delete
-                    </button>
-                    {this.state.showRecipe ? console.log("weszło") : null }
 
                   </li>
                 );
@@ -158,7 +165,6 @@ class App extends Component {
             </ul>
           </div>
         </div>
-        {/*<Modal show={this.state.isModalOpen} onClose={this.toggleModal}/>*/}
       </div>
     );
   }

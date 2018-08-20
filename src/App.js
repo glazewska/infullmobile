@@ -87,7 +87,10 @@ class App extends Component {
     // filter out the item being deleted
     const updatedList = list.filter(item => item.id !== id);
 
-    this.setState({list: updatedList});
+    this.setState({
+      list: updatedList,
+      showRecipe: false
+    });
   }
 
   showItem() {
@@ -135,11 +138,11 @@ class App extends Component {
                     {item.value}
                     {this.state.showRecipe &&
                     <div className="backdrop">
-                      <div className="modal">
-                        <div className="ingredients-list">
-                          <input defaultValue={item.value}/>
-                          <textarea defaultValue={item.ingredients}/>
-                        </div>
+                      <div className="modal ingredients-list">
+                        Name
+                        <input defaultValue={item.value}/>
+                        Ingredients
+                        <textarea defaultValue={item.ingredients}/>
                         <button onClick={console.log('klik')}>
                           Save
                         </button>

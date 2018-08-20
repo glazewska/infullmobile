@@ -1,0 +1,91 @@
+.App {
+    text-align: center;
+    color: #313436;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-background {
+    background-color: #313436;
+    height: 300px;
+    padding: 20px;
+    background-size: cover;
+}
+
+.title {
+    font-size: 1.5em;
+    color: #343434;
+    text-transform: uppercase;
+}
+
+.recipes {
+    text-align: left;
+    width: 40%;
+    margin: auto;
+    color: #3f3f3f;
+}
+
+.new-recipe {
+    background-color: #D1B396;
+    border-radius: 5px;
+    border-color: #D1B396;
+    height: 25px;
+    min-width: 200px;
+}
+
+.new-ingredients {
+    height: 75px;
+    min-width: 400px;
+    border-radius: 5px;
+    background-color: #DAC2AB;
+    border-color: #DAC2AB;
+}
+
+.new-recipe:focus {
+    outline: none !important;
+    border: 1px solid peru;
+    box-shadow: 0 0 10px #A46A32;
+}
+
+.new-recipe-button {
+    background-color: #A46A32;
+    border-radius: 5px;
+    border-color: #313436;
+    height: 20px;
+    color: #313436;
+}
+
+.list-container {
+    align-items: center;
+    width: 100%;
+}
+
+.list-item {
+    list-style: none;
+    border: 1px solid #313436;
+    background-color: grey;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-grow: 2;
+    color: #313436;
+}
+
+.list-item > button {
+    background-color: #835528;
+    border-radius: 5px;
+    border-color: #313436;
+    height: 20px;
+    color: #2a2a2a;
+    margin-left: auto;
+    margin-right: 0;
+    width: 50px;
+}
+
+.list-item > button:last-of-type {
+    margin-right: 0;
+    margin-left: 0;
+    background-color: #694420;
+}

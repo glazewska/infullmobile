@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import header from "./food-overhead.jpg";
 import "./App.css";
+import Details from "./Details"
 
 
 class App extends Component {
@@ -11,6 +12,12 @@ class App extends Component {
       list: [],
       ingredients: "",
       showRecipe: false,
+      editRecipe: false,
+      itemToShow: [{
+        value: "",
+        ingredients: ""
+      }],
+      editedIngredients: ""
     };
   }
 
@@ -50,9 +57,7 @@ class App extends Component {
   }
 
   saveToStorage() {
-    // for every item in React state
     for (let key in this.state) {
-      // save to localStorage
       localStorage.setItem(key, JSON.stringify(this.state[key]));
     }
   }
@@ -67,8 +72,6 @@ class App extends Component {
       value: this.state.newItem.slice(),
       ingredients: this.state.ingredients.slice()
     };
-
-    // copy current list of items
     const list = [...this.state.list];
 
     list.push(newItem);
@@ -80,11 +83,9 @@ class App extends Component {
     });
   }
 
-
   deleteItem(id) {
-    // copy current list of items
+    console.log(id);
     const list = [...this.state.list];
-    // filter out the item being deleted
     const updatedList = list.filter(item => item.id !== id);
 
     this.setState({
@@ -93,14 +94,55 @@ class App extends Component {
     });
   }
 
-  showItem() {
-    this.setState({showRecipe: !this.state.showRecipe});
+  showItem(id) {
+    const list = [...this.state.list];
+    const toShow = list.filter(item => item.id === id);
+
+    this.setState({
+      showRecipe: !this.state.showRecipe,
+      itemToShow: toShow,
+    });
+  }
+
+  saveChangedItem(id) {
+    const list = [...this.state.list];
+    const toEdit = list.filter(item => item.id === id);
+
+    console.log(toEdit[0]);
+    // console.log(list.indexOf(idToEdit));
+
+    let index = list.indexOf(toEdit[0]);
+    if (index > -1) {
+      list.splice(index, 1);
+    }
+
+    console.log(index);
+
+    const editedItem = {
+      id: toEdit[0].id,
+      value: this.state.itemToShow[0].value,
+      ingredients: this.state.editedIngredients.slice()
+    };
+
+    list.push(editedItem);
+
+    this.setState({
+      list,
+      showRecipe: false,
+      editedIngredients: ""
+    })
+  }
+
+  closeItem() {
+    this.setState({
+      showRecipe: !this.state.showRecipe,
+      itemToShow: ""
+    });
   }
 
 
   render() {
-    console.log(this.state);
-
+console.log(this.state);
     return (
       <div className="App">
         <header>
@@ -137,28 +179,34 @@ class App extends Component {
                   <li className="list-item" key={item.id}>
                     {item.value}
                     {this.state.showRecipe &&
-                    <div className="backdrop">
+                    <Details>
                       <div className="modal ingredients-list">
-                        Name
-                        <input defaultValue={item.value}/>
-                        Ingredients
-                        <textarea defaultValue={item.ingredients}/>
-                        <button onClick={console.log('klik')}>
+                        Name:
+                        <input
+                          value={this.state.itemToShow[0].value}
+                           onChange={e => this.updateInput(this.state.itemToShow.name, e.target.value)}
+                          // value={this.state.editedName}
+                        />
+                        Ingredients:
+                        <textarea
+                           // defaultValue={this.state.itemToShow[0].ingredients}
+                           onChange={e => this.updateInput("editedIngredients", e.target.value)}
+                           value={this.state.editedIngredients}
+                        />
+                        <button onClick={() => this.saveChangedItem(this.state.itemToShow[0].id)}>
                           Save
                         </button>
-                        <button onClick={() => this.deleteItem(item.id)}>
+                        <button onClick={() => this.deleteItem(this.state.itemToShow[0].id)}>
                           Delete
                         </button>
-                        <button
-                          onClick={() => this.showItem(item.id)}>
+                        <button onClick={() => this.closeItem()}>
                           Close
                         </button>
                       </div>
-                    </div>
+                    </Details >
                     }
 
-                    <button
-                      onClick={() => this.showItem(item.id)}>
+                    <button onClick={() => this.showItem(item.id)}>
                       Show
                     </button>
 

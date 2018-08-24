@@ -173,13 +173,11 @@ class App extends Component {
         </header>
         <div className="recipes">
           <form>
-
             <input className="new-recipe"
                    type="text"
                    placeholder="Add new recipe"
                    value={this.state.newItem}
-                   onChange={e => this.updateInput("newItem", e.target.value)}
-            />
+                   onChange={e => this.updateInput("newItem", e.target.value)}/>
 
             <textarea className="new-ingredients"
                       placeholder="Add ingredients"
@@ -187,10 +185,8 @@ class App extends Component {
                       onChange={e => this.updateInput("ingredients", e.target.value)}>
 
             </textarea>
-            <button className="new-recipe-button"
-                    onClick={() => this.addItem()}
-                    disabled={!this.state.newItem.length}
-            >
+            <button onClick={() => this.addItem()}
+                    disabled={!this.state.newItem.length}>
               Add
             </button>
           </form>
@@ -202,40 +198,44 @@ class App extends Component {
                     {item.value}
                     {this.state.showRecipe &&
                     <Details>
-                      <div className="modal ingredients-list">
-                        Name:
-                        <input disabled={this.state.inputDisabled}
-                               defaultValue={this.state.itemToShow[0].value}
-                               type="text"
-                               onChange={e => this.updateInput("editedValue", e.target.value)}
-                          // value={this.state.editedName}
-                        />
-                        Ingredients:
-                        <textarea disabled={this.state.inputDisabled}
-                                  defaultValue={this.state.itemToShow[0].ingredients}
-                                  onChange={e => this.updateInput("editedIngredients", e.target.value)}
-                          // value={this.state.editedIngredients}
-                        />
-                        {this.state.inputDisabled === true &&
-                        <button onClick={() => this.setState({
-                          inputDisabled: false,
-                          editedValue: this.state.itemToShow[0].value,
-                          editedIngredients: this.state.itemToShow[0].ingredients
-                        })}>
-                          Edit
-                        </button>
-                        }
-                        {this.state.inputDisabled === false &&
-                        <button onClick={() => this.saveChangedItem(this.state.itemToShow[0].id)}>
-                          Save
-                        </button>
-                        }
-                        <button onClick={() => this.deleteItem(this.state.itemToShow[0].id)}>
-                          Delete
-                        </button>
-                        <button onClick={() => this.closeItem()}>
-                          Close
-                        </button>
+                      <div className="modal">
+                        <div className="recipes-container">
+                          Name:
+                          <input disabled={this.state.inputDisabled}
+                                 defaultValue={this.state.itemToShow[0].value}
+                                 type="text"
+                                 onChange={e => this.updateInput("editedValue", e.target.value)}/>
+                          Ingredients:
+                          <textarea disabled={this.state.inputDisabled}
+                                    defaultValue={this.state.itemToShow[0].ingredients}
+                                    onChange={e => this.updateInput("editedIngredients", e.target.value)}/>
+                        </div>
+                        <div className="container">
+                          {this.state.inputDisabled === true &&
+                          <button
+                            onClick={() => this.setState({
+                              inputDisabled: false,
+                              editedValue: this.state.itemToShow[0].value,
+                              editedIngredients: this.state.itemToShow[0].ingredients
+                            })}>
+                            Edit
+                          </button>
+                          }
+                          {this.state.inputDisabled === false &&
+                          <button
+                            onClick={() => this.saveChangedItem(this.state.itemToShow[0].id)}>
+                            Save
+                          </button>
+                          }
+                          <button
+                            onClick={() => this.deleteItem(this.state.itemToShow[0].id)}>
+                            Delete
+                          </button>
+                          <button
+                            onClick={() => this.closeItem()}>
+                            Close
+                          </button>
+                        </div>
                       </div>
                     </Details >
                     }

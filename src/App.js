@@ -64,9 +64,9 @@ class App extends Component {
   }
 
   updateInput(key, value) {
-      this.setState({
-        [key]: value
-      });
+    this.setState({
+      [key]: value
+    });
   }
 
   editInput(key, value) {
@@ -75,10 +75,10 @@ class App extends Component {
         editedValue: this.state.itemToShow[0].value
       })
     } else {
-        this.setState({
-          [key]: value
-        });
-      }
+      this.setState({
+        [key]: value
+      });
+    }
 
     if (this.state.editedIngredients === "") {
       this.setState({
@@ -222,12 +222,15 @@ class App extends Component {
                                   onChange={e => this.updateInput("editedIngredients", e.target.value)}
                           // value={this.state.editedIngredients}
                         />
+                        {this.state.inputDisabled === true &&
                         <button onClick={() => this.setState({
                           inputDisabled: false,
                           editedValue: this.state.itemToShow[0].value,
-                          editedIngredients: this.state.itemToShow[0].ingredients})}>
+                          editedIngredients: this.state.itemToShow[0].ingredients
+                        })}>
                           Edit
                         </button>
+                        }
                         {this.state.inputDisabled === false &&
                         <button onClick={() => this.saveChangedItem(this.state.itemToShow[0].id)}>
                           Save

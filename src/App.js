@@ -112,9 +112,6 @@ class App extends Component {
     const list = [...this.state.list];
     const toEdit = list.filter(item => item.id === id);
 
-    console.log(toEdit[0]);
-    // console.log(list.indexOf(idToEdit));
-
     let index = list.indexOf(toEdit[0]);
     if (index > -1) {
       list.splice(index, 1);
@@ -146,7 +143,6 @@ class App extends Component {
   }
 
   deleteItem(id) {
-    console.log(id);
     const list = [...this.state.list];
     const updatedList = list.filter(item => item.id !== id);
 
@@ -168,8 +164,6 @@ class App extends Component {
 
 
   render() {
-    console.log(this.state.itemToShow);
-    console.log(this.state);
 
     return (
       <div className="App">

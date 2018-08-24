@@ -12,12 +12,13 @@ class App extends Component {
       list: [],
       ingredients: "",
       showRecipe: false,
-      editRecipe: false,
       itemToShow: [{
         value: "",
         ingredients: ""
       }],
-      editedIngredients: ""
+      editedValue: "",
+      editedIngredients: "",
+      inputDisabled: true
     };
   }
 
@@ -63,7 +64,31 @@ class App extends Component {
   }
 
   updateInput(key, value) {
-    this.setState({[key]: value});
+      this.setState({
+        [key]: value
+      });
+  }
+
+  editInput(key, value) {
+    if (this.state.editedValue === "") {
+      this.setState({
+        editedValue: this.state.itemToShow[0].value
+      })
+    } else {
+        this.setState({
+          [key]: value
+        });
+      }
+
+    if (this.state.editedIngredients === "") {
+      this.setState({
+        editedIngredients: this.state.itemToShow[0].ingredients
+      })
+    } else {
+      this.setState({
+        [key]: value
+      });
+    }
   }
 
   addItem() {
@@ -80,6 +105,43 @@ class App extends Component {
       list,
       newItem: "",
       ingredients: ""
+    });
+  }
+
+  saveChangedItem(id) {
+    const list = [...this.state.list];
+    const toEdit = list.filter(item => item.id === id);
+
+    console.log(toEdit[0]);
+    // console.log(list.indexOf(idToEdit));
+
+    let index = list.indexOf(toEdit[0]);
+    if (index > -1) {
+      list.splice(index, 1);
+    }
+
+    const editedItem = {
+      id: toEdit[0].id,
+      value: this.state.editedValue.slice(),
+      ingredients: this.state.editedIngredients.slice()
+    };
+
+    list.push(editedItem);
+
+    this.setState({
+      list,
+      showRecipe: false,
+      editedValue: "",
+      editedIngredients: "",
+      inputDisabled: true
+    })
+  }
+
+  closeItem() {
+    this.setState({
+      showRecipe: !this.state.showRecipe,
+      itemToShow: "",
+      inputDisabled: true
     });
   }
 
@@ -104,45 +166,11 @@ class App extends Component {
     });
   }
 
-  saveChangedItem(id) {
-    const list = [...this.state.list];
-    const toEdit = list.filter(item => item.id === id);
-
-    console.log(toEdit[0]);
-    // console.log(list.indexOf(idToEdit));
-
-    let index = list.indexOf(toEdit[0]);
-    if (index > -1) {
-      list.splice(index, 1);
-    }
-
-    console.log(index);
-
-    const editedItem = {
-      id: toEdit[0].id,
-      value: this.state.itemToShow[0].value,
-      ingredients: this.state.editedIngredients.slice()
-    };
-
-    list.push(editedItem);
-
-    this.setState({
-      list,
-      showRecipe: false,
-      editedIngredients: ""
-    })
-  }
-
-  closeItem() {
-    this.setState({
-      showRecipe: !this.state.showRecipe,
-      itemToShow: ""
-    });
-  }
-
 
   render() {
-console.log(this.state);
+    console.log(this.state.itemToShow);
+    console.log(this.state);
+
     return (
       <div className="App">
         <header>
@@ -182,20 +210,29 @@ console.log(this.state);
                     <Details>
                       <div className="modal ingredients-list">
                         Name:
-                        <input
-                          value={this.state.itemToShow[0].value}
-                           onChange={e => this.updateInput(this.state.itemToShow.name, e.target.value)}
+                        <input disabled={this.state.inputDisabled}
+                               defaultValue={this.state.itemToShow[0].value}
+                               type="text"
+                               onChange={e => this.updateInput("editedValue", e.target.value)}
                           // value={this.state.editedName}
                         />
                         Ingredients:
-                        <textarea
-                           // defaultValue={this.state.itemToShow[0].ingredients}
-                           onChange={e => this.updateInput("editedIngredients", e.target.value)}
-                           value={this.state.editedIngredients}
+                        <textarea disabled={this.state.inputDisabled}
+                                  defaultValue={this.state.itemToShow[0].ingredients}
+                                  onChange={e => this.updateInput("editedIngredients", e.target.value)}
+                          // value={this.state.editedIngredients}
                         />
+                        <button onClick={() => this.setState({
+                          inputDisabled: false,
+                          editedValue: this.state.itemToShow[0].value,
+                          editedIngredients: this.state.itemToShow[0].ingredients})}>
+                          Edit
+                        </button>
+                        {this.state.inputDisabled === false &&
                         <button onClick={() => this.saveChangedItem(this.state.itemToShow[0].id)}>
                           Save
                         </button>
+                        }
                         <button onClick={() => this.deleteItem(this.state.itemToShow[0].id)}>
                           Delete
                         </button>
